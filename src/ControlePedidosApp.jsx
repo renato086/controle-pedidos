@@ -7,7 +7,17 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { Plus, Trash } from 'lucide-react';
 import logo from "@/assets/logo.png";
 import { db } from "./firebase.js";
-import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, serverTimestamp, query, orderBy } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+  serverTimestamp,
+  query,
+  orderBy
+} from "firebase/firestore";
 
 export default function ControlePedidosApp() {
   const [cliente, setCliente] = useState('');
@@ -65,7 +75,7 @@ export default function ControlePedidosApp() {
         <img src={logo} alt="Logo Mundo Nerd" className="h-[60px] w-auto max-w-[160px] object-contain" />
       </div>
       <div className="max-w-3xl mx-auto bg-white/80 rounded-xl p-4 shadow-md">
-        <h1 className="text-2xl font-bold mb-4">📦 Controle de Pedidos 🚀</h1>
+        <h1 className="text-2xl font-bold mb-4">📦 Controle de Pedidos</h1>
 
         <Card className="mb-4">
           <CardContent className="p-4 space-y-2">
@@ -101,6 +111,7 @@ export default function ControlePedidosApp() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Cliente</TableHead>
+                  <TableHead>Data</TableHead>
                   <TableHead>Itens</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Ações</TableHead>
@@ -110,6 +121,7 @@ export default function ControlePedidosApp() {
                 {pedidos.map(p => (
                   <TableRow key={p.id}>
                     <TableCell>{p.cliente}</TableCell>
+                    <TableCell>{p.timestamp?.toDate().toLocaleString()}</TableCell>
                     <TableCell>
                       {p.items.map((i,j) => (
                         <div key={j}>{i.produto} (x{i.quantidade})</div>
@@ -131,7 +143,7 @@ export default function ControlePedidosApp() {
                 ))}
                 {pedidos.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-gray-400">Nenhum pedido registrado.</TableCell>
+                    <TableCell colSpan={5} className="text-center text-gray-400">Nenhum pedido registrado.</TableCell>
                   </TableRow>
                 )}
               </TableBody>
