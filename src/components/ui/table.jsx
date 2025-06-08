@@ -12,8 +12,8 @@ export function TableBody({ children }) {
   return <tbody className="bg-white divide-y divide-gray-200">{children}</tbody>;
 }
 
-export function TableRow({ children }) {
-  return <tr>{children}</tr>;
+export function TableRow({ children, className = '' }) {
+  return <tr className={className}>{children}</tr>;
 }
 
 export function TableHead({ children }) {
