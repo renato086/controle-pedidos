@@ -127,7 +127,7 @@ export default function ControlePedidosApp() {
                   {pedidos.map(p => (
                     <TableRow key={p.id}>
                       <TableCell>{p.cliente}</TableCell>
-                      <TableCell>{p.timestamp?.toDate().toLocaleString()}</TableCell>
+                      <TableCell>{p.timestamp?.toDate().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</TableCell>
                       <TableCell>
                         {p.items.map((i,j) => (
                           <div key={j}>{i.produto} (x{i.quantidade})</div>
