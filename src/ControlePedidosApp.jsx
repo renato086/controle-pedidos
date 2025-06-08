@@ -7,12 +7,12 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { Plus, Trash } from 'lucide-react';
 import logo from "@/assets/logo.png";
 import { db } from "./firebase.js";
-import { collection, addDoc, deleteDoc, doc, onSnapshot, serverTimestamp, query, orderBy } from "firebase/firestore";
+import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, serverTimestamp, query, orderBy } from "firebase/firestore";
 
 export default function ControlePedidosApp() {
-  const [descricao, setDescricao] = useState('');
-  const [quantidade, setQuantidade] = useState('');
-  const [status, setStatus] = useState('pendente');
+  const [cliente, setCliente] = useState('');
+  const [items, setItems] = useState([{ produto: '', quantidade: '' }]);
+  const [statusOptions] = useState(['EM PREPARO', 'FINALIZADO', 'ENTREGUE']);
   const [pedidos, setPedidos] = useState([]);
 
   useEffect(() => {
@@ -24,22 +24,39 @@ export default function ControlePedidosApp() {
     return () => unsubscribe();
   }, []);
 
+  function handleItemChange(index, field, value) {
+    const newItems = [...items];
+    newItems[index][field] = value;
+    setItems(newItems);
+  }
+
+  function addItemRow() {
+    setItems([...items, { produto: '', quantidade: '' }]);
+  }
+
+  function removeItemRow(index) {
+    setItems(items.filter((_, i) => i !== index));
+  }
+
   async function adicionarPedido() {
-    if (!descricao || !quantidade) return;
-    const novoPedido = {
-      descricao,
-      quantidade: parseInt(quantidade),
-      status,
+    if (!cliente || items.some(i => !i.produto || !i.quantidade)) return;
+    const novo = {
+      cliente,
+      items: items.map(i => ({ produto: i.produto, quantidade: parseInt(i.quantidade) })),
+      status: 'EM PREPARO',
       timestamp: serverTimestamp()
     };
-    await addDoc(collection(db, "pedidos"), novoPedido);
-    setDescricao('');
-    setQuantidade('');
-    setStatus('pendente');
+    await addDoc(collection(db, "pedidos"), novo);
+    setCliente('');
+    setItems([{ produto: '', quantidade: '' }]);
   }
 
   async function removerPedido(id) {
     await deleteDoc(doc(db, "pedidos", id));
+  }
+
+  async function changeStatus(id, newStatus) {
+    await updateDoc(doc(db, "pedidos", id), { status: newStatus });
   }
 
   return (
@@ -51,11 +68,30 @@ export default function ControlePedidosApp() {
         <h1 className="text-2xl font-bold mb-4">📦 Controle de Pedidos</h1>
 
         <Card className="mb-4">
-          <CardContent className="p-4 grid grid-cols-1 md:grid-cols-4 gap-2">
-            <Input placeholder="Descrição da peça" value={descricao} onChange={e => setDescricao(e.target.value)} />
-            <Input placeholder="Quantidade" type="number" value={quantidade} onChange={e => setQuantidade(e.target.value)} />
-            <Input placeholder="Status" value={status} onChange={e => setStatus(e.target.value)} />
-            <Button onClick={adicionarPedido}><Plus className="w-4 h-4 mr-2" />Adicionar</Button>
+          <CardContent className="p-4 space-y-2">
+            <Input placeholder="Nome do Cliente" value={cliente} onChange={e => setCliente(e.target.value)} />
+            {items.map((item, idx) => (
+              <div key={idx} className="grid grid-cols-3 gap-2 items-center">
+                <Input
+                  placeholder="Produto"
+                  value={item.produto}
+                  onChange={e => handleItemChange(idx, 'produto', e.target.value)}
+                />
+                <Input
+                  placeholder="Quantidade"
+                  type="number"
+                  value={item.quantidade}
+                  onChange={e => handleItemChange(idx, 'quantidade', e.target.value)}
+                />
+                <Button variant="destructive" size="sm" onClick={() => removeItemRow(idx)}>
+                  <Trash className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+            <div className="flex gap-2">
+              <Button onClick={addItemRow}><Plus className="w-4 h-4 mr-1" />Adicionar Item</Button>
+              <Button onClick={adicionarPedido}>Registrar Pedido</Button>
+            </div>
           </CardContent>
         </Card>
 
@@ -64,8 +100,8 @@ export default function ControlePedidosApp() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead>Quantidade</TableHead>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>Itens</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Ações</TableHead>
                 </TableRow>
@@ -73,9 +109,19 @@ export default function ControlePedidosApp() {
               <TableBody>
                 {pedidos.map(p => (
                   <TableRow key={p.id}>
-                    <TableCell>{p.descricao}</TableCell>
-                    <TableCell>{p.quantidade}</TableCell>
-                    <TableCell>{p.status}</TableCell>
+                    <TableCell>{p.cliente}</TableCell>
+                    <TableCell>
+                      {p.items.map((i,j) => (
+                        <div key={j}>{i.produto} (x{i.quantidade})</div>
+                      ))}
+                    </TableCell>
+                    <TableCell>
+                      <Select value={p.status} onValueChange={val => changeStatus(p.id, val)}>
+                        {statusOptions.map(opt => (
+                          <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                        ))}
+                      </Select>
+                    </TableCell>
                     <TableCell>
                       <Button variant="destructive" size="sm" onClick={() => removerPedido(p.id)}>
                         <Trash className="w-4 h-4" />
