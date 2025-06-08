@@ -84,7 +84,7 @@ export default function ControlePedidosApp() {
         <img src={logo} alt="Logo Mundo Nerd" className="h-[60px] w-auto max-w-[160px] object-contain" />
       </div>
       <div className="max-w-3xl mx-auto bg-white/80 rounded-xl p-4 shadow-md space-y-6">
-        <h1 className="text-2xl font-bold text-center">📦 Controle de Pedidos</h1>
+        <h1 className="text-2xl font-bold text-center">📦 Controle de Pedidos 🚀</h1>
 
         <Card className="mb-4">
           <CardContent className="p-4 space-y-4">
