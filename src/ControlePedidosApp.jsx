@@ -84,7 +84,7 @@ export default function ControlePedidosApp() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-     <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-4">
         <img src={logo} alt="Logo Mundo Nerd" className="h-[60px] w-auto max-w-[160px] object-contain" />
       </div>
       <div className="max-w-3xl mx-auto bg-white/80 rounded-xl p-6 shadow-lg space-y-6">
@@ -118,7 +118,7 @@ export default function ControlePedidosApp() {
                   onChange={e => handleItemChange(idx, 'unitario', e.target.value)}
                 />
                 <div className="flex items-center">
-                  <Button variant="destructive" size="sm" onClick={() => removeItemRow(idx)}>
+                  <Button variant("destructive") size="sm" onClick={() => removeItemRow(idx)}>
                     <Trash className="w-4 h-4 mx-auto" />
                   </Button>
                 </div>
@@ -164,7 +164,7 @@ export default function ControlePedidosApp() {
                       </TableCell>
                       <TableCell className="font-bold">R$ {totalPedido.toFixed(2)}</TableCell>
                       <TableCell>
-                        <Select value={p.status} onChange={e => changeStatus(p.id, e.target.value)} className="w-full">
+                        <Select value={p.status} onValueChange={val => changeStatus(p.id, val)} className="w-full">
                           {statusOptions.map(opt => (
                             <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                           ))}
