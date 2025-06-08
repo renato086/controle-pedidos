@@ -84,8 +84,8 @@ export default function ControlePedidosApp() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <div className="flex justify-center mb-4">
-        <img src="@/assets/logo.png" alt="Logo Mundo Nerd" className="h-[60px] w-auto object-contain" />
+     <div className="flex justify-center mb-4">
+        <img src={logo} alt="Logo Mundo Nerd" className="h-[60px] w-auto max-w-[160px] object-contain" />
       </div>
       <div className="max-w-3xl mx-auto bg-white/80 rounded-xl p-6 shadow-lg space-y-6">
         <h1 className="text-3xl font-bold text-center">📦 Controle de Pedidos 🚀</h1>
