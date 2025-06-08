@@ -69,6 +69,15 @@ export default function ControlePedidosApp() {
     await updateDoc(doc(db, "pedidos", id), { status: newStatus });
   }
 
+  function rowBg(status) {
+    switch (status) {
+      case 'EM PREPARO': return 'bg-yellow-100';
+      case 'FINALIZADO': return 'bg-green-100';
+      case 'ENTREGUE': return 'bg-gray-200';
+      default: return '';
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="flex justify-center mb-4">
@@ -125,7 +134,7 @@ export default function ControlePedidosApp() {
                 </TableHeader>
                 <TableBody>
                   {pedidos.map(p => (
-                    <TableRow key={p.id}>
+                    <TableRow key={p.id} className={`${rowBg(p.status)}`}> 
                       <TableCell>{p.cliente}</TableCell>
                       <TableCell>{p.timestamp?.toDate().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</TableCell>
                       <TableCell>
