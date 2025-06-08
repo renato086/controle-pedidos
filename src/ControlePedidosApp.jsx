@@ -21,7 +21,7 @@ import {
 export default function ControlePedidosApp() {
   const [cliente, setCliente] = useState('');
   const [items, setItems] = useState([{ produto: '', quantidade: '', unitario: '' }]);
-  const [statusOptions] = useState(['EM PREPARO', 'FINALIZADO', 'ENTREGUE']);
+  const [statusOptions] = useState(['PREPARO', 'FINALIZADO', 'ENTREGUE']);
   const [pedidos, setPedidos] = useState([]);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function ControlePedidosApp() {
     await addDoc(collection(db, "pedidos"), {
       cliente,
       items: itemsToSave,
-      status: 'EM PREPARO',
+      status: 'PREPARO',
       timestamp: serverTimestamp()
     });
     setCliente('');
@@ -74,7 +74,7 @@ export default function ControlePedidosApp() {
 
   function rowBg(status) {
     switch (status) {
-      case 'EM PREPARO': return 'bg-yellow-100';
+      case 'PREPARO': return 'bg-yellow-100';
       case 'FINALIZADO': return 'bg-green-100';
       case 'ENTREGUE': return 'bg-gray-200';
       default: return '';
