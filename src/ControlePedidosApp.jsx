@@ -118,7 +118,7 @@ export default function ControlePedidosApp() {
                   onChange={e => handleItemChange(idx, 'unitario', e.target.value)}
                 />
                 <div className="flex items-center">
-                  <Button variant("destructive") size="sm" onClick={() => removeItemRow(idx)}>
+                  <Button variant="destructive" size="sm" onClick={() => removeItemRow(idx)}>
                     <Trash className="w-4 h-4 mx-auto" />
                   </Button>
                 </div>
