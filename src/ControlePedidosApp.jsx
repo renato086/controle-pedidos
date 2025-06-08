@@ -74,14 +74,19 @@ export default function ControlePedidosApp() {
       <div className="flex justify-center mb-4">
         <img src={logo} alt="Logo Mundo Nerd" className="h-[60px] w-auto max-w-[160px] object-contain" />
       </div>
-      <div className="max-w-3xl mx-auto bg-white/80 rounded-xl p-4 shadow-md">
-        <h1 className="text-2xl font-bold mb-4">📦 Controle de Pedidos</h1>
+      <div className="max-w-3xl mx-auto bg-white/80 rounded-xl p-4 shadow-md space-y-6">
+        <h1 className="text-2xl font-bold text-center">📦 Controle de Pedidos</h1>
 
         <Card className="mb-4">
-          <CardContent className="p-4 space-y-2">
-            <Input placeholder="Nome do Cliente" value={cliente} onChange={e => setCliente(e.target.value)} />
+          <CardContent className="p-4 space-y-4">
+            <Input
+              placeholder="Nome do Cliente"
+              value={cliente}
+              onChange={e => setCliente(e.target.value)}
+              className="w-full"
+            />
             {items.map((item, idx) => (
-              <div key={idx} className="grid grid-cols-3 gap-2 items-center">
+              <div key={idx} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 <Input
                   placeholder="Produto"
                   value={item.produto}
@@ -94,60 +99,62 @@ export default function ControlePedidosApp() {
                   onChange={e => handleItemChange(idx, 'quantidade', e.target.value)}
                 />
                 <Button variant="destructive" size="sm" onClick={() => removeItemRow(idx)}>
-                  <Trash className="w-4 h-4" />
+                  <Trash className="w-4 h-4 mx-auto" />
                 </Button>
               </div>
             ))}
-            <div className="flex gap-2">
-              <Button onClick={addItemRow}><Plus className="w-4 h-4 mr-1" />Adicionar Item</Button>
-              <Button onClick={adicionarPedido}>Registrar Pedido</Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button onClick={addItemRow} className="flex-1 sm:flex-none"><Plus className="w-4 h-4 mr-1" />Adicionar Item</Button>
+              <Button onClick={adicionarPedido} className="flex-1 sm:flex-none">Registrar Pedido</Button>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Cliente</TableHead>
-                  <TableHead>Data</TableHead>
-                  <TableHead>Itens</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pedidos.map(p => (
-                  <TableRow key={p.id}>
-                    <TableCell>{p.cliente}</TableCell>
-                    <TableCell>{p.timestamp?.toDate().toLocaleString()}</TableCell>
-                    <TableCell>
-                      {p.items.map((i,j) => (
-                        <div key={j}>{i.produto} (x{i.quantidade})</div>
-                      ))}
-                    </TableCell>
-                    <TableCell>
-                      <Select value={p.status} onValueChange={val => changeStatus(p.id, val)}>
-                        {statusOptions.map(opt => (
-                          <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                        ))}
-                      </Select>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="destructive" size="sm" onClick={() => removerPedido(p.id)}>
-                        <Trash className="w-4 h-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {pedidos.length === 0 && (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-gray-400">Nenhum pedido registrado.</TableCell>
+                    <TableHead>Cliente</TableHead>
+                    <TableHead>Data</TableHead>
+                    <TableHead>Itens</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Ações</TableHead>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {pedidos.map(p => (
+                    <TableRow key={p.id}>
+                      <TableCell>{p.cliente}</TableCell>
+                      <TableCell>{p.timestamp?.toDate().toLocaleString()}</TableCell>
+                      <TableCell>
+                        {p.items.map((i,j) => (
+                          <div key={j}>{i.produto} (x{i.quantidade})</div>
+                        ))}
+                      </TableCell>
+                      <TableCell>
+                        <Select value={p.status} onValueChange={val => changeStatus(p.id, val)} className="w-full">
+                          {statusOptions.map(opt => (
+                            <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                          ))}
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="destructive" size="sm">
+                          <Trash className="w-4 h-4 mx-auto" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {pedidos.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center text-gray-400">Nenhum pedido registrado.</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>
