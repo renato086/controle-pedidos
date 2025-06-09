@@ -3,7 +3,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectItem } from "@/components/ui/select";
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from "@/components/ui/table";
 import { Plus, Trash } from 'lucide-react';
 import logo from "@/assets/logo.png";
 import { db } from "./firebase.js";
@@ -154,7 +161,12 @@ export default function ControlePedidosApp() {
                   return (
                     <TableRow key={p.id} className={rowBg(p.status)}>
                       <TableCell>{p.cliente}</TableCell>
-                      <TableCell>{p.timestamp?.toDate().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</TableCell>
+                      <TableCell>
+                        {p.timestamp?.toDate().toLocaleDateString('pt-BR', {
+                          day: '2-digit',
+                          month: '2-digit'
+                        })}
+                      </TableCell>
                       <TableCell>
                         {p.items.map((i, j) => (
                           <div key={j}>
@@ -164,7 +176,11 @@ export default function ControlePedidosApp() {
                       </TableCell>
                       <TableCell className="font-bold">R$ {totalPedido.toFixed(2)}</TableCell>
                       <TableCell>
-                        <Select value={p.status} onValueChange={val => changeStatus(p.id, val)} className="w-full">
+                        <Select
+                          value={p.status}
+                          onValueChange={val => changeStatus(p.id, val)}
+                          className="w-full"
+                        >
                           {statusOptions.map(opt => (
                             <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                           ))}
